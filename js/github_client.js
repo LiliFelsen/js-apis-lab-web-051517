@@ -1,22 +1,27 @@
-let token = '4903eaa06801bacddda2e1de919d758287a8ebee'
+let token = $("#token").val()
 
 
 //define functions here
-var createGist = function(file_name, content, description, token){
+var createGist = function(filename, content, description, token){
   let url = `https://api.github.com/gists`
-  let data = {
-    'public': true,
+  let fileName = $('#filename').val()
+  let content = $('#content').val()
+  let description = $('#description').val()
+
+  let newGist = {
     'description': description,
-    'files': {}
-  }
-  data['files'][file_name] = {
-    'content': content
+    'public': true,
+    'files': {
+      fileName: {
+        'content': content
+      }
+    }
   }
 
   $.ajax({
     url: url,
     method: 'POST',
-    data: JSON.stringify(data),
+    data: JSON.stringify(newGist),
     headers: {
       Authorization: 'token ' + token
     },
@@ -31,7 +36,7 @@ var createGist = function(file_name, content, description, token){
 
 var myGists = function (username, token){
  $.ajax({
-   url: url: 'https://api.github.com/users/' + username + '/gists?access_token=' + token,
+  url: url: 'https://api.github.com/users/' + username + '/gists?access_token=' + token,
   dataType: 'jsonp',
   success: function(data) {
     var receivedData = data.data
